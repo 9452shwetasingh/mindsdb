@@ -154,10 +154,14 @@ class MLTaskConsumer:
             self.cache.set(redis_key.status, ML_TASK_STATUS.COMPLETE.value, 180)
 
     def run(self):
+        sys.stderr.write('CONSUMER: starting 2\n')
         self._ready_event.set()
         while True:
+            sys.stderr.write('CONSUMER: starting 3\n')
             self._ready_event.wait()
+            sys.stderr.write('CONSUMER: starting 4\n')
             self._ready_event.clear()
+            sys.stderr.write('CONSUMER: starting 5\n')
             threading.Thread(target=self._listen).start()
 
 
