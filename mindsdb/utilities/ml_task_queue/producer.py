@@ -1,4 +1,5 @@
 import pickle
+import sys
 
 from redis.exceptions import ConnectionError
 from walrus import Database
@@ -55,6 +56,7 @@ class MLTaskProducer:
                 self.cache.set(redis_key.dataframe, to_bytes(dataframe), 180)
             self.cache.set(redis_key.status, ML_TASK_STATUS.WAITING, 180)
 
+            sys.stderr.write('PRODUCER: WRITE MSG')
             self.stream.add(message)
             return Task(self.db, redis_key)
 
