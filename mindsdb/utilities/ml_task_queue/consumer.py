@@ -92,6 +92,7 @@ class MLTaskConsumer:
 
     def _listen(self):
         message = None
+        print('CONSUMER: waiting for message')
         while message is None:
             self.wait_cpu_free()
             message = self.consumer_group.read(count=1, block=1000, consumer=TASKS_STREAM_CONSUMER_NAME)
@@ -99,6 +100,7 @@ class MLTaskConsumer:
                 message = None
 
         try:
+            print(f'CONSUMER: got message! {message}')
             message = message[TASKS_STREAM_NAME][0][0]
             message_id = message[0].decode()
             message_content = message[1]
@@ -125,6 +127,7 @@ class MLTaskConsumer:
             self._ready_event.set()
 
         try:
+            print('CONSUMER: run task')
             task = process_cache.apply_async(
                 task_type=task_type,
                 model_id=model_id,
@@ -133,6 +136,7 @@ class MLTaskConsumer:
             )
             status_notifier = StatusNotifier(redis_key, ML_TASK_STATUS.PROCESSING, self.db, self.cache)
             status_notifier.start()
+            print('CONSUMER: waiting result')
             result = task.result()
         except Exception as e:
             status_notifier.stop()

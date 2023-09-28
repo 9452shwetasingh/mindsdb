@@ -19,6 +19,7 @@ class Task:
         while (msg := pubsub.get_message(timeout=self._timeout)):
             if msg['type'] not in pubsub.PUBLISH_MESSAGE_TYPES:
                 continue
+            print(f'TASK.SUBSCRIBE: GET MESSAGE {msg}')
             ml_task_status = ML_TASK_STATUS(msg['data'])
             if ml_task_status == ML_TASK_STATUS.COMPLETE:
                 dataframe_bytes = cache.get(self.redis_key.dataframe)
