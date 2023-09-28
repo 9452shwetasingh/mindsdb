@@ -162,5 +162,6 @@ class MLTaskConsumer:
 
 
 def start(verbose: bool):
+    sys.stderr.write('CONSUMER: starting 1\n')
     consumer = MLTaskConsumer()
     consumer.run()
