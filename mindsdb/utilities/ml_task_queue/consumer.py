@@ -167,5 +167,10 @@ class MLTaskConsumer:
 
 def start(verbose: bool):
     sys.stderr.write('CONSUMER: starting 1\n')
-    consumer = MLTaskConsumer()
-    consumer.run()
+    try:
+        consumer = MLTaskConsumer()
+        consumer.run()
+    except Exception as e:
+        print(f'CONSUMER: exception {e}')
+    finally:
+        print('CONSUMER: done')
