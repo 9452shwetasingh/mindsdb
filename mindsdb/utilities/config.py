@@ -1,4 +1,3 @@
-import sys
 import os
 import json
 from copy import deepcopy
@@ -96,7 +95,6 @@ class Config():
             'type': 'local'
         }
 
-        sys.stderr.write(f'CONFIG: MINDSDB_ML_QUEUE_TYPE {os.environ.get("MINDSDB_ML_QUEUE_TYPE")}')
         if os.environ.get('MINDSDB_ML_QUEUE_TYPE', '').lower() == 'redis':
             ml_queue['type'] = 'redis'
             ml_queue['host'] = os.environ.get('MINDSDB_ML_QUEUE_HOST', 'localhost')

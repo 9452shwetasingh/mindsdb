@@ -260,6 +260,8 @@ if __name__ == '__main__':
         } for api in api_arr
     }
 
+    sys.stderr.write(f'CONFIG: ml_task_queue: {config.get("ml_task_queue")}')
+
     start_functions = {
         'http': start_http,
         'mysql': start_mysql,
