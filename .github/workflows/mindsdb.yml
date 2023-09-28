@@ -85,7 +85,7 @@ jobs:
       run: |
 
         if [ "$RUNNER_OS" == "Linux" ]; then
-          pytest -vx tests/integration_tests/flows/test_ml_task_queue.py
+          pytest -xs tests/integration_tests/flows/test_ml_task_queue.py
 
           # Unit tests
           # echo -e "\n===============\nUnit tests\n===============\n"
