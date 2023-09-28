@@ -85,6 +85,8 @@ jobs:
       run: |
 
         if [ "$RUNNER_OS" == "Linux" ]; then
+          pytest -vx tests/integration_tests/flows/test_ml_task_queue.py
+
           # Unit tests
           # echo -e "\n===============\nUnit tests\n===============\n"
           cat mindsdb/interfaces/storage/db.py | grep integration
@@ -101,8 +103,6 @@ jobs:
           env PYTHONPATH=./ pytest tests/unit/test_mongodb_server.py
 
           env PYTHONPATH=./ pytest tests/unit/test_cache.py
-
-          pytest -vx tests/integration_tests/flows/test_ml_task_queue.py
 
           # MySQL API
           echo -e "\n===============test MySQL API===============\n"
