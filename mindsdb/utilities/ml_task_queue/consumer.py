@@ -23,30 +23,37 @@ from mindsdb.utilities.ml_task_queue.const import (
 class MLTaskConsumer:
     def __init__(self) -> None:
         # region preload ml handlers
+        print('CONSUMER: x1')
         from mindsdb.interfaces.database.integrations import integration_controller
         config = Config()
         is_cloud = config.get('cloud', False)
+        print('CONSUMER: x2')
 
         preload_hendlers = {}
         lightwood_handler = integration_controller.handler_modules['lightwood']
         if lightwood_handler.Handler is not None:
             preload_hendlers[lightwood_handler.Handler] = 4 if is_cloud else 1
+        print('CONSUMER: x3')
 
         huggingface_handler = integration_controller.handler_modules['huggingface']
         if huggingface_handler.Handler is not None:
             preload_hendlers[huggingface_handler.Handler] = 1 if is_cloud else 0
+        print('CONSUMER: x4')
 
         openai_handler = integration_controller.handler_modules['openai']
         if openai_handler.Handler is not None:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
+        print('CONSUMER: x5')
 
         process_cache.init(preload_hendlers)
+        print('CONSUMER: x6')
         # endregion
 
         # region collect cpu usage statistic
         self.cpu_stat = [0] * 10
         threading.Thread(target=self._collect_cpu_stat).start()
         # endregion
+        print('CONSUMER: x7')
 
         # region connect to redis
         self.db = Database(
@@ -57,16 +64,22 @@ class MLTaskConsumer:
             password=config.get('password'),
             protocol=3
         )
+        print('CONSUMER: x8')
         try:
             self.db.ping()
+            print('CONSUMER: x9')
         except ConnectionError:
             print('Cant connect to redis')
             raise
         self.db.Stream(TASKS_STREAM_NAME)
+        print('CONSUMER: x10')
         self.cache = self.db.cache()
         self.consumer_group = self.db.consumer_group(TASKS_STREAM_CONSUMER_GROUP_NAME, [TASKS_STREAM_NAME])
+        print('CONSUMER: x11')
         self.consumer_group.create()
+        print('CONSUMER: x12')
         self.consumer_group.consumer(TASKS_STREAM_CONSUMER_NAME)
+        print('CONSUMER: x13')
         # endregion
 
         self._ready_event = threading.Event()
