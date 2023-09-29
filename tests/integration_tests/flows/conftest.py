@@ -175,6 +175,7 @@ def mindsdb_app(request, config):
             time.sleep(1)
             if time.time() > threshold:
                 raise Exception(f"unable to launch mindsdb app in {timeout} seconds")
+    time.sleep(30)
 
     def cleanup():
         print("Stopping Application")
