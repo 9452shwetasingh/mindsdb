@@ -43,7 +43,7 @@ class MLTaskConsumer:
         openai_handler = integration_controller.handler_modules['openai']
         if openai_handler.Handler is not None:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
-        print('CONSUMER: x5')
+        print(f'CONSUMER: x5 {preload_hendlers}')
 
         process_cache.init(preload_hendlers)
         print('CONSUMER: x6')
