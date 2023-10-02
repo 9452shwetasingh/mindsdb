@@ -79,10 +79,22 @@ def submit(*args, **kwargs):
                               ' QueueManager wakeup')
                 thread_wakeup.wakeup()
             # Start the processes so that their sentinels are known.
-            print('SUBMIT 6')
-            self._adjust_process_count()
+            print(f'SUBMIT 6 {len(self._processes)} {self._max_workers}')
+            from concurrent.futures.process import _queue_management_worker, _threads_wakeups, _process_worker
+            for _ in range(len(self._processes), self._max_workers):
+                print('SUBMIT 6-1')
+                p = self._mp_context.Process(
+                    target=_process_worker,
+                    args=(self._call_queue,
+                          self._result_queue,
+                          self._initializer,
+                          self._initargs))
+                print('SUBMIT 6-2')
+                p.start()
+                print('SUBMIT 6-3')
+                self._processes[p.pid] = p
+                print('SUBMIT 6-4')
             print('SUBMIT 7')
-            from concurrent.futures.process import _queue_management_worker, _threads_wakeups
             import weakref
             self._queue_management_thread = threading.Thread(
                 target=_queue_management_worker,
