@@ -82,7 +82,7 @@ def submit(*args, **kwargs):
             print(f'SUBMIT 6 {len(self._processes)} {self._max_workers}')
             from concurrent.futures.process import _queue_management_worker, _threads_wakeups, _process_worker
             for _ in range(len(self._processes), self._max_workers):
-                print('SUBMIT 6-1')
+                print(f'SUBMIT 6-1 {self._mp_context._name}')
                 p = self._mp_context.Process(
                     target=_process_worker,
                     args=(self._call_queue,
