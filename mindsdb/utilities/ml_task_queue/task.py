@@ -12,7 +12,7 @@ class Task:
         self.redis_key = redis_key
         self.dataframe = None
         self.exception = None
-        self._timeout = 60
+        self._timeout = 180
 
     def subscribe(self):
         pubsub = self.db.pubsub()
