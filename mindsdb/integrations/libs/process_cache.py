@@ -29,6 +29,48 @@ def empty_callback(_task):
     return None
 
 
+def submit(*args, **kwargs):
+    if len(args) >= 2:
+        self, fn, *args = args
+    elif not args:
+        raise TypeError("descriptor 'submit' of 'ProcessPoolExecutor' object "
+                        "needs an argument")
+    elif 'fn' in kwargs:
+        fn = kwargs.pop('fn')
+        self, *args = args
+        raise Exception('!!')
+    else:
+        raise TypeError('submit expected at least 1 positional argument, '
+                        'got %d' % (len(args) - 1))
+    print('SUBMIT 1')
+    with self._shutdown_lock:
+        if self._broken:
+            raise Exception('!!')
+        if self._shutdown_thread:
+            raise RuntimeError('cannot schedule new futures after shutdown')
+        from concurrent.futures import _base
+        f = _base.Future()
+
+        class _WorkItem(object):
+            def __init__(self, future, fn, args, kwargs):
+                self.future = future
+                self.fn = fn
+                self.args = args
+                self.kwargs = kwargs
+        w = _WorkItem(f, fn, args, kwargs)
+        print('SUBMIT 2')
+        self._pending_work_items[self._queue_count] = w
+        self._work_ids.put(self._queue_count)
+        self._queue_count += 1
+        # Wake up queue management thread
+        print('SUBMIT 3')
+        self._queue_management_thread_wakeup.wakeup()
+        print('SUBMIT 4')
+        self._start_queue_management_thread()
+        print('SUBMIT 5')
+        return f
+
+
 class WarmProcess:
     """ Class-wrapper for a process that persist for a long time. The process
         may be initialized with any handler requirements. Current implimentation
@@ -52,7 +94,8 @@ class WarmProcess:
         # untill it get a task, we need manually run dummy task to force init.
         print(f'WarmProcess x3, locked = {self.pool._shutdown_lock.locked()}')
         try:
-            self.task = self.pool.submit(dummy_task)
+            self.pool.submit = submit
+            self.task = self.pool.submit(self.pool, dummy_task)
         except Exception as e:
             print(f'WarmProcess EXCEPTION {e}')
         print('WarmProcess x4')
