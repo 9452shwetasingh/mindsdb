@@ -66,8 +66,41 @@ def submit(*args, **kwargs):
         print('SUBMIT 3')
         self._queue_management_thread_wakeup.wakeup()
         print('SUBMIT 4')
-        self._start_queue_management_thread()
-        print('SUBMIT 5')
+        # self._start_queue_management_thread()
+        import multiprocessing as mp
+        if self._queue_management_thread is None:
+            print('SUBMIT 5')
+            # When the executor gets garbarge collected, the weakref callback
+            # will wake up the queue management thread so that it can terminate
+            # if there is no pending work item.
+            def weakref_cb(_,
+                           thread_wakeup=self._queue_management_thread_wakeup):
+                mp.util.debug('Executor collected: triggering callback for'
+                              ' QueueManager wakeup')
+                thread_wakeup.wakeup()
+            # Start the processes so that their sentinels are known.
+            print('SUBMIT 6')
+            self._adjust_process_count()
+            print('SUBMIT 7')
+            from concurrent.futures import _queue_management_worker, _threads_wakeups
+            import weakref
+            self._queue_management_thread = threading.Thread(
+                target=_queue_management_worker,
+                args=(weakref.ref(self, weakref_cb),
+                      self._processes,
+                      self._pending_work_items,
+                      self._work_ids,
+                      self._call_queue,
+                      self._result_queue,
+                      self._queue_management_thread_wakeup),
+                name="QueueManagerThread")
+            print('SUBMIT 8')
+            self._queue_management_thread.daemon = True
+            self._queue_management_thread.start()
+            print('SUBMIT 9')
+            _threads_wakeups[self._queue_management_thread] = \
+                self._queue_management_thread_wakeup
+        print('SUBMIT X')
         return f
 
 
