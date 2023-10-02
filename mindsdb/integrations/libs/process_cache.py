@@ -185,10 +185,13 @@ class ProcessCache:
             Args:
                 preload_handlers (dict): {handler_class: count_of_processes}
         """
+        print('ProcessCache WAIT LOCK')
         with self._lock:
+            print('ProcessCache GET LOCK')
             if self._init is False:
                 self._init = True
                 for handler in preload_handlers:
+                    print(f'ProcessCache PREPARE {handler.__name__}')
                     self._keep_alive[handler.__name__] = preload_handlers[handler]
                     self.cache[handler.__name__] = {
                         'last_usage_at': time.time(),
@@ -198,6 +201,7 @@ class ProcessCache:
                             for _x in range(preload_handlers[handler])
                         ]
                     }
+                    print(f'ProcessCache PREPARE DONE {handler.__name__}')
 
     def apply_async(self, task_type: ML_TASK_TYPE, model_id: int, payload: dict, dataframe: DataFrame = None) -> Future:
         """ run new task. If possible - do it in existing process, if not - start new one.
