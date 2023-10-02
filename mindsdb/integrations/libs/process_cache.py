@@ -42,14 +42,19 @@ class WarmProcess:
                 initializer (Callable): the same as ProcessPoolExecutor initializer
                 initargs (tuple): the same as ProcessPoolExecutor initargs
         """
+        print('WarmProcess x1')
         self.pool = ProcessPoolExecutor(1, initializer=initializer, initargs=initargs)
+        print('WarmProcess x2')
         self.last_usage_at = time.time()
         self._markers = set()
         # region bacause of ProcessPoolExecutor does not start new process
         # untill it get a task, we need manually run dummy task to force init.
+        print('WarmProcess x3')
         self.task = self.pool.submit(dummy_task)
+        print('WarmProcess x4')
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
+        print('WarmProcess x5')
         # endregion
 
     def __del__(self):
@@ -69,6 +74,7 @@ class WarmProcess:
     def _init_done_callback(self, _task):
         """ callback for initial task
         """
+        print('WarmProcess x6')
         self._init_done = True
 
     def _update_last_usage_at_callback(self, _task):
