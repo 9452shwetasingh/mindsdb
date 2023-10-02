@@ -291,13 +291,6 @@ if __name__ == '__main__':
             'started': False
         }
 
-    apis = {
-        'ml_task_queue': {
-            'process': None,
-            'started': False
-        }
-    }
-
     ctx = mp.get_context('spawn')
     for api_name, api_data in apis.items():
         if api_data['started']:
