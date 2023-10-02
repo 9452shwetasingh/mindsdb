@@ -49,7 +49,7 @@ class WarmProcess:
         self._markers = set()
         # region bacause of ProcessPoolExecutor does not start new process
         # untill it get a task, we need manually run dummy task to force init.
-        print('WarmProcess x3')
+        print(f'WarmProcess x3, locked = {self.pool._shutdown_lock.locked()}')
         try:
             self.task = self.pool.submit(dummy_task)
         except Exception as e:
