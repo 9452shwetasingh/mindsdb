@@ -82,7 +82,7 @@ def submit(*args, **kwargs):
             print('SUBMIT 6')
             self._adjust_process_count()
             print('SUBMIT 7')
-            from concurrent.futures import _queue_management_worker, _threads_wakeups
+            from concurrent.futures.process import _queue_management_worker, _threads_wakeups
             import weakref
             self._queue_management_thread = threading.Thread(
                 target=_queue_management_worker,
