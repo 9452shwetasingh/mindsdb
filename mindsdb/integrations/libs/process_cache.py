@@ -50,7 +50,10 @@ class WarmProcess:
         # region bacause of ProcessPoolExecutor does not start new process
         # untill it get a task, we need manually run dummy task to force init.
         print('WarmProcess x3')
-        self.task = self.pool.submit(dummy_task)
+        try:
+            self.task = self.pool.submit(dummy_task)
+        except Exception as e:
+            print(f'WarmProcess EXCEPTION {e}')
         print('WarmProcess x4')
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
@@ -86,6 +89,7 @@ class WarmProcess:
             Returns:
                 bool
         """
+        print('WarmProcess READY')
         if self._init_done is False:
             self.task.result()
             self._init_done = True
@@ -134,6 +138,7 @@ class WarmProcess:
             Returns:
                 Future
         """
+        print('WarmProcess APPLY_ASYNC')
         if not self.ready():
             raise Exception('Process task is not ready')
         self.task = self.pool.submit(
