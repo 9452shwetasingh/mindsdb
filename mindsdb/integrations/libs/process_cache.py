@@ -15,8 +15,9 @@ def init_ml_handler(module_path):
     import importlib  # noqa
 
     from mindsdb.integrations.libs.learn_process import learn_process, predict_process  # noqa
-
+    print(f'INIT_ML_HANDLER START {module_path}')
     importlib.import_module(module_path)
+    print('INIT_ML_HANDLER DONE')
 
 
 def dummy_task():
