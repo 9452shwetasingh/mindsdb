@@ -21,6 +21,7 @@ def init_ml_handler(module_path):
 
 
 def dummy_task():
+    print('DUMMY_TASK dummy_task')
     return None
 
 
