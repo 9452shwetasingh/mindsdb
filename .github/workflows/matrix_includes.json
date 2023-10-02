@@ -16,7 +16,7 @@
     },
     {
       "runs_on": "ubuntu-latest",
-      "python-version": 3.8,
+      "python-version": 3.9,
       "runOnBranch": "always"
     },
     {
