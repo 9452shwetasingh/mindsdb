@@ -50,7 +50,9 @@ class WarmProcess:
         import threading
         for thread in threading.enumerate():
             print(f'THREAD {thread.name}')
+        print('BEFORE SUBMIT')
         self.task = self.pool.submit(dummy_task)
+        print('AFTER SUBMIT')
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
         # endregion
