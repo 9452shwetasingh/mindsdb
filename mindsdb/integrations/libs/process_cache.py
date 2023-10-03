@@ -3,6 +3,7 @@ import time
 import threading
 from typing import Optional, Callable
 from concurrent.futures import ProcessPoolExecutor, Future
+import datetime
 
 from pandas import DataFrame
 
@@ -69,7 +70,7 @@ class WarmProcess:
         """ callback for initial task
         """
         self._init_done = True
-        print('WARM_PROCESS INIT DONE')
+        print(f'[{str(datetime.datetime.now())}]WARM_PROCESS INIT DONE')
 
     def _update_last_usage_at_callback(self, _task):
         self.last_usage_at = time.time()

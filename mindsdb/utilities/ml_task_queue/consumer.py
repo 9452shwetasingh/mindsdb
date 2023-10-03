@@ -1,6 +1,7 @@
 import time
 import pickle
 import threading
+import datetime
 
 import psutil
 from walrus import Database
@@ -39,9 +40,9 @@ class MLTaskConsumer:
         if openai_handler.Handler is not None:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
 
-        print(f'PROCESS_CACHE INIT {preload_hendlers}')
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
         process_cache.init(preload_hendlers)
-        print('PROCESS_CACHE INIT DONE')
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE')
         # endregion
 
         # region collect cpu usage statistic
@@ -165,4 +166,4 @@ def start(verbose: bool):
         consumer = MLTaskConsumer()
         consumer.run()
     except Exception as e:
-        print(f'EXCEPTION !!!! {e}')
+        print(f'[{str(datetime.datetime.now())}] EXCEPTION !!!! {e}')
