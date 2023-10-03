@@ -73,13 +73,13 @@ def do_clean_process_marks():
 
 
 if __name__ == '__main__':
-    test('mdb')
+    # test('mdb')
 
-    context = mp.get_context('spawn')
-    p = context.Process(target=test, args=('proc', ))
-    p.start()
-    p.join()
-    print('DONE! ')
+    # context = mp.get_context('spawn')
+    # p = context.Process(target=test, args=('proc', ))
+    # p.start()
+    # p.join()
+    # print('DONE! ')
     # ----------------  __init__.py section ------------------
     clean_process_marks()
     ctx.set_default()

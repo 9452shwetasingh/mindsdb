@@ -3,7 +3,7 @@ import multiprocessing as mp
 
 
 def dummy_task():
-    print('dummy_task')
+    print('dummy_task', flush=True)
     return None
 
 
@@ -15,7 +15,7 @@ def test2(mark):
     print(f'TEST2 {mark} 3', flush=True)
     task.result()
     print(f'TEST2 {mark} 4', flush=True)
-    # pool.shutdown(wait=True)
+    pool.shutdown(wait=True)
     print(f'TEST2 {mark} 5', flush=True)
 
 

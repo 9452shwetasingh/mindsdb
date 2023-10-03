@@ -172,9 +172,9 @@ def start(verbose: bool):
     # if lightwood_handler.Handler is not None:
     preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
 
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}', flush=True)
     process_cache = ProcessCache()
     process_cache.init(preload_hendlers)
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS', flush=True)
     process_cache.wait_init()
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE', flush=True)

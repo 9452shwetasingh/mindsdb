@@ -13,6 +13,7 @@ from mindsdb.integrations.libs.learn_process import learn_process, predict_proce
 
 
 def init_ml_handler(module_path):
+    print('INIT TASK', flush=True)
     import importlib  # noqa
 
     from mindsdb.integrations.libs.learn_process import learn_process, predict_process  # noqa
@@ -21,6 +22,7 @@ def init_ml_handler(module_path):
 
 
 def dummy_task():
+    print('DUMMY TASK', flush=True)
     return None
 
 
@@ -49,10 +51,10 @@ class WarmProcess:
         # untill it get a task, we need manually run dummy task to force init.
         import threading
         for thread in threading.enumerate():
-            print(f'THREAD {thread.name}')
-        print('BEFORE SUBMIT')
+            print(f'THREAD {thread.name}', flush=True)
+        print('BEFORE SUBMIT', flush=True)
         self.task = self.pool.submit(dummy_task)
-        print('AFTER SUBMIT')
+        print('AFTER SUBMIT', flush=True)
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
         # endregion

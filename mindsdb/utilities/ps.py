@@ -34,6 +34,7 @@ def test2(mark):
     print(f'TEST2 {mark} 3')
     task.result()
     print(f'TEST2 {mark} 4')
+    pool.shutdown()
 
 
 def get_child_pids(pid):
