@@ -1,5 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor
-import multiprocess as mp
+import multiprocessing as mp
 
 
 def dummy_task():
