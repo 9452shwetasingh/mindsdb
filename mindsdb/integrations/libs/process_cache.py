@@ -47,6 +47,9 @@ class WarmProcess:
         self._markers = set()
         # region bacause of ProcessPoolExecutor does not start new process
         # untill it get a task, we need manually run dummy task to force init.
+        import threading
+        for thread in threading.enumerate():
+            print(f'THREAD {thread.name}')
         self.task = self.pool.submit(dummy_task)
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
