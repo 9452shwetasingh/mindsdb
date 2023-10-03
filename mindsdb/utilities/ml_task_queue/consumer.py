@@ -40,12 +40,12 @@ class MLTaskConsumer:
         if openai_handler.Handler is not None:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
 
-        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}', flush=True)
         self.process_cache = ProcessCache()
         self.process_cache.init(preload_hendlers)
-        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS', flush=True)
         self.process_cache.wait_init()
-        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE')
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE', flush=True)
         # endregion
 
         # region collect cpu usage statistic
@@ -160,21 +160,23 @@ class MLTaskConsumer:
             self._ready_event.wait()
             self._ready_event.clear()
             time.sleep(30)
-            print('CONSUMER: STARTLISTEN THREAD')
+            print('CONSUMER: STARTLISTEN THREAD', flush=True)
             threading.Thread(target=self._listen).start()
 
 
 def start(verbose: bool):
+    consumer = MLTaskConsumer()
+    consumer.run()
     # from mindsdb.interfaces.database.integrations import integration_controller
 
-    preload_hendlers = {}
-    # lightwood_handler = integration_controller.handler_modules['lightwood']
-    # if lightwood_handler.Handler is not None:
-    preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
+    # preload_hendlers = {}
+    # # lightwood_handler = integration_controller.handler_modules['lightwood']
+    # # if lightwood_handler.Handler is not None:
+    # preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
 
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}', flush=True)
-    process_cache = ProcessCache()
-    process_cache.init(preload_hendlers)
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS', flush=True)
-    process_cache.wait_init()
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE', flush=True)
+    # print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}', flush=True)
+    # process_cache = ProcessCache()
+    # process_cache.init(preload_hendlers)
+    # print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS', flush=True)
+    # process_cache.wait_init()
+    # print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE', flush=True)
