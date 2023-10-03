@@ -4,6 +4,22 @@ from collections import namedtuple
 import psutil
 
 
+def test(mark):
+    import datetime
+    from mindsdb.integrations.libs.process_cache import ProcessCache
+    preload_hendlers = {}
+    # lightwood_handler = integration_controller.handler_modules['lightwood']
+    # if lightwood_handler.Handler is not None:
+    preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
+
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers} {mark}')
+    process_cache = ProcessCache()
+    process_cache.init(preload_hendlers)
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS {mark}')
+    process_cache.wait_init()
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init {mark}')
+
+
 def get_child_pids(pid):
     p = psutil.Process(pid=pid)
     return p.children(recursive=True)

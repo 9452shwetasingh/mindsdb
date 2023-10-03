@@ -31,6 +31,7 @@ from mindsdb.utilities.fs import create_dirs_recursive, clean_process_marks, cle
 from mindsdb.utilities.telemetry import telemetry_file_exists, disable_telemetry
 from mindsdb.utilities.context import context as ctx
 from mindsdb.utilities.auth import register_oauth_client, get_aws_meta_data
+from mindsdb.utilities.ps import test
 
 try:
     import torch.multiprocessing as mp
@@ -69,22 +70,6 @@ def close_api_gracefully(apis):
 def do_clean_process_marks():
     while _stop_event.wait(timeout=5) is False:
         clean_unlinked_process_marks()
-
-
-def test(mark):
-    import datetime
-    from mindsdb.integrations.libs.process_cache import ProcessCache
-    preload_hendlers = {}
-    # lightwood_handler = integration_controller.handler_modules['lightwood']
-    # if lightwood_handler.Handler is not None:
-    preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
-
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers} {mark}')
-    process_cache = ProcessCache()
-    process_cache.init(preload_hendlers)
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS {mark}')
-    process_cache.wait_init()
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init {mark}')
 
 
 if __name__ == '__main__':
