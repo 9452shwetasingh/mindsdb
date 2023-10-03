@@ -23,22 +23,24 @@ from mindsdb.utilities.ml_task_queue.const import (
 class MLTaskConsumer:
     def __init__(self) -> None:
         # region preload ml handlers
-        from mindsdb.interfaces.database.integrations import integration_controller
+        # from mindsdb.interfaces.database.integrations import integration_controller
         config = Config()
-        is_cloud = config.get('cloud', False)
+        # is_cloud = config.get('cloud', False)
 
         preload_hendlers = {}
-        lightwood_handler = integration_controller.handler_modules['lightwood']
-        if lightwood_handler.Handler is not None:
-            preload_hendlers[lightwood_handler.Handler] = 4 if is_cloud else 1
+        # lightwood_handler = integration_controller.handler_modules['lightwood']
+        # if lightwood_handler.Handler is not None:
+        #     preload_hendlers[lightwood_handler.Handler] = 4 if is_cloud else 1
 
-        huggingface_handler = integration_controller.handler_modules['huggingface']
-        if huggingface_handler.Handler is not None:
-            preload_hendlers[huggingface_handler.Handler] = 1 if is_cloud else 0
+        # huggingface_handler = integration_controller.handler_modules['huggingface']
+        # if huggingface_handler.Handler is not None:
+        #     preload_hendlers[huggingface_handler.Handler] = 1 if is_cloud else 0
 
-        openai_handler = integration_controller.handler_modules['openai']
-        if openai_handler.Handler is not None:
-            preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
+        # openai_handler = integration_controller.handler_modules['openai']
+        # if openai_handler.Handler is not None:
+        #     preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
+
+        preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
 
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}', flush=True)
         self.process_cache = ProcessCache()
