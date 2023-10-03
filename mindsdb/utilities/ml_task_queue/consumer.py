@@ -166,8 +166,6 @@ class MLTaskConsumer:
 
 def start(verbose: bool):
     # from mindsdb.interfaces.database.integrations import integration_controller
-    config = Config()
-    is_cloud = config.get('cloud', False)
 
     preload_hendlers = {}
     # lightwood_handler = integration_controller.handler_modules['lightwood']
