@@ -39,7 +39,9 @@ class MLTaskConsumer:
         if openai_handler.Handler is not None:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
 
+        print(f'PROCESS_CACHE INIT {preload_hendlers}')
         process_cache.init(preload_hendlers)
+        print('PROCESS_CACHE INIT DONE')
         # endregion
 
         # region collect cpu usage statistic
@@ -153,9 +155,15 @@ class MLTaskConsumer:
         while True:
             self._ready_event.wait()
             self._ready_event.clear()
+            time.sleep(30)
+            print('CONSUMER: STARTLISTEN THREAD')
             threading.Thread(target=self._listen).start()
 
 
 def start(verbose: bool):
-    consumer = MLTaskConsumer()
-    consumer.run()
+    try:
+        consumer = MLTaskConsumer()
+        consumer.run()
+    except Exception as e:
+        print(f'EXCEPTION !!!! {e}')
+
