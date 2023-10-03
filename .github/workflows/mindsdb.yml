@@ -86,6 +86,7 @@ jobs:
 
         if [ "$RUNNER_OS" == "Linux" ]; then
           # pytest -xs tests/integration_tests/flows/test_ml_task_queue.py
+          python3 mindsdb/utilities/test.py
           python3 -m mindsdb
 
           # Unit tests
