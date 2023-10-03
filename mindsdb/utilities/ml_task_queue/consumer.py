@@ -42,6 +42,8 @@ class MLTaskConsumer:
 
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
         process_cache.init(preload_hendlers)
+        print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
+        process_cache.wait_init()
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE')
         # endregion
 

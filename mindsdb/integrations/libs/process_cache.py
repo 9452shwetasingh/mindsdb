@@ -201,6 +201,13 @@ class ProcessCache:
                         ]
                     }
 
+    def wait_init(self):
+        """ block thread untill all processes will be ready
+        """
+        for handler_name in self.cache:
+            for process in self.cache[handler_name]['processes']:
+                process.ready()
+
     def apply_async(self, task_type: ML_TASK_TYPE, model_id: int, payload: dict, dataframe: DataFrame = None) -> Future:
         """ run new task. If possible - do it in existing process, if not - start new one.
 
