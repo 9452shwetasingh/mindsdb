@@ -165,22 +165,14 @@ class MLTaskConsumer:
 
 
 def start(verbose: bool):
-    from mindsdb.interfaces.database.integrations import integration_controller
+    # from mindsdb.interfaces.database.integrations import integration_controller
     config = Config()
     is_cloud = config.get('cloud', False)
 
     preload_hendlers = {}
-    lightwood_handler = integration_controller.handler_modules['lightwood']
-    if lightwood_handler.Handler is not None:
-        preload_hendlers[lightwood_handler.Handler] = 4 if is_cloud else 1
-
-    huggingface_handler = integration_controller.handler_modules['huggingface']
-    if huggingface_handler.Handler is not None:
-        preload_hendlers[huggingface_handler.Handler] = 1 if is_cloud else 0
-
-    openai_handler = integration_controller.handler_modules['openai']
-    if openai_handler.Handler is not None:
-        preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
+    # lightwood_handler = integration_controller.handler_modules['lightwood']
+    # if lightwood_handler.Handler is not None:
+    preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
 
     print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
     process_cache = ProcessCache()

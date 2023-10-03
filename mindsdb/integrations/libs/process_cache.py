@@ -163,7 +163,7 @@ class ProcessCache:
         self._keep_alive = {}
         self._stop_event = threading.Event()
         self.cleaner_thread = None
-        self._start_clean()
+        # self._start_clean()
 
     def __del__(self):
         self._stop_clean()
@@ -177,7 +177,7 @@ class ProcessCache:
         ):
             return
         self._stop_event.clear()
-        self.cleaner_thread = threading.Thread(target=self._clean)
+        self.cleaner_thread = threading.Thread(target=self._clean, name='process_cache_cleaner_thread')
         self.cleaner_thread.daemon = True
         self.cleaner_thread.start()
 
@@ -195,14 +195,14 @@ class ProcessCache:
         with self._lock:
             if self._init is False:
                 self._init = True
-                for handler in preload_handlers:
-                    self._keep_alive[handler.__name__] = preload_handlers[handler]
-                    self.cache[handler.__name__] = {
+                for handler_name, handler_module in preload_handlers:
+                    # self._keep_alive[handler_name] = preload_handlers[handler]
+                    self.cache[handler_name] = {
                         'last_usage_at': time.time(),
-                        'handler_module': handler.__module__,
+                        'handler_module': handler_module,
                         'processes': [
-                            WarmProcess(init_ml_handler, (handler.__module__,))
-                            for _x in range(preload_handlers[handler])
+                            WarmProcess(init_ml_handler, (handler_module,))
+                            for _x in range(1)
                         ]
                     }
 
