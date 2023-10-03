@@ -9,7 +9,7 @@ from pandas import DataFrame
 
 from mindsdb.utilities.config import Config
 from mindsdb.utilities.context import context as ctx
-from mindsdb.integrations.libs.process_cache import process_cache
+from mindsdb.integrations.libs.process_cache import ProcessCache
 from mindsdb.utilities.ml_task_queue.utils import RedisKey, StatusNotifier, to_bytes, from_bytes
 from mindsdb.utilities.ml_task_queue.const import (
     ML_TASK_TYPE,
@@ -41,9 +41,10 @@ class MLTaskConsumer:
             preload_hendlers[openai_handler.Handler] = 1 if is_cloud else 0
 
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
-        process_cache.init(preload_hendlers)
+        self.process_cache = ProcessCache()
+        self.process_cache.init(preload_hendlers)
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
-        process_cache.wait_init()
+        self.process_cache.wait_init()
         print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE')
         # endregion
 
@@ -130,7 +131,7 @@ class MLTaskConsumer:
             self._ready_event.set()
 
         try:
-            task = process_cache.apply_async(
+            task = self.process_cache.apply_async(
                 task_type=task_type,
                 model_id=model_id,
                 payload=payload,
