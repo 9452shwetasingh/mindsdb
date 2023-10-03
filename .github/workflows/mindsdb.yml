@@ -53,18 +53,6 @@ jobs:
       uses: actions/setup-python@v4.7.0
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        # temp
-        pip install git+https://github.com/mindsdb/lightwood.git@staging --upgrade --no-cache-dir
-        pip install --no-cache-dir .
-        pip install -r requirements_test.txt
-        pip uninstall pycodestyle -y && pip install pycodestyle==2.9.1  # temp fix while exist conflict in last version with flake8
-      shell: bash
-      env:
-        ACCESS_KEY:  ${{ secrets.GH_ACCESS_KEY }}
-        mindsdb_github_masterkey: ${{secrets.mindsdb_github_masterkey}}
     - name: Run integration api and flow tests
       run: |
 
