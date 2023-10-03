@@ -139,13 +139,14 @@ class WarmProcess:
         # untill it get a task, we need manually run dummy task to force init.
         print(f'WarmProcess x3, locked = {self.pool._shutdown_lock.locked()}')
         try:
-            self.pool.submit = submit
+            # self.pool.submit = submit
             self.task = self.pool.submit(self.pool, dummy_task)
         except Exception as e:
             print(f'WarmProcess EXCEPTION {e}')
         print('WarmProcess x4')
         self._init_done = False
         self.task.add_done_callback(self._init_done_callback)
+        self.task.result()
         print('WarmProcess x5')
         # endregion
 
@@ -257,7 +258,7 @@ class ProcessCache:
         self._keep_alive = {}
         self._stop_event = threading.Event()
         self.cleaner_thread = None
-        self._start_clean()
+        # self._start_clean()
 
     def __del__(self):
         self._stop_clean()
