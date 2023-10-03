@@ -72,6 +72,19 @@ def do_clean_process_marks():
 
 
 if __name__ == '__main__':
+    import datetime
+    from mindsdb.integrations.libs.process_cache import ProcessCache
+    preload_hendlers = {}
+    # lightwood_handler = integration_controller.handler_modules['lightwood']
+    # if lightwood_handler.Handler is not None:
+    preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
+
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
+    process_cache = ProcessCache()
+    process_cache.init(preload_hendlers)
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
+    process_cache.wait_init()
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init mdb')
     # ----------------  __init__.py section ------------------
     clean_process_marks()
     ctx.set_default()
