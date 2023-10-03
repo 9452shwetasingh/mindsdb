@@ -20,7 +20,7 @@ def test2(mark):
 
 
 if __name__ == "__main__":
-    # test2('main')
+    test2('main')
     context = mp.get_context('spawn')
     p = context.Process(target=test2, args=('proc', ))
     p.start()
