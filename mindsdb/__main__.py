@@ -71,7 +71,7 @@ def do_clean_process_marks():
         clean_unlinked_process_marks()
 
 
-if __name__ == '__main__':
+def test(mark):
     import datetime
     from mindsdb.integrations.libs.process_cache import ProcessCache
     preload_hendlers = {}
@@ -79,12 +79,22 @@ if __name__ == '__main__':
     # if lightwood_handler.Handler is not None:
     preload_hendlers[('LightwoodHandler', 'mindsdb.integrations.handlers.lightwood_handler.lightwood_handler.lightwood_handler')] = 1
 
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers}')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT {preload_hendlers} {mark}')
     process_cache = ProcessCache()
     process_cache.init(preload_hendlers)
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS {mark}')
     process_cache.wait_init()
-    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init mdb')
+    print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init {mark}')
+
+
+if __name__ == '__main__':
+    test('mdb')
+
+    context = mp.get_context('spawn')
+    p = context.Process(target=test, args=('proc', ))
+    p.start()
+    p.join()
+    print('DONE! ')
     # ----------------  __init__.py section ------------------
     clean_process_marks()
     ctx.set_default()
