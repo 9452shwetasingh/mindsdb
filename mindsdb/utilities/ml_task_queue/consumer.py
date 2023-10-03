@@ -166,4 +166,3 @@ def start(verbose: bool):
         consumer.run()
     except Exception as e:
         print(f'EXCEPTION !!!! {e}')
-
