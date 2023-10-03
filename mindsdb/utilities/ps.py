@@ -2,6 +2,7 @@ import sys
 import time
 from collections import namedtuple
 import psutil
+from concurrent.futures import ProcessPoolExecutor
 
 
 def test(mark):
@@ -18,6 +19,21 @@ def test(mark):
     print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT IN PROGRESS {mark}')
     process_cache.wait_init()
     print(f'[{str(datetime.datetime.now())}]PROCESS_CACHE INIT DONE => init {mark}')
+
+
+def dummy_task():
+    print('dummy_task')
+    return None
+
+
+def test2(mark):
+    print(f'TEST2 {mark} 1')
+    pool = ProcessPoolExecutor(1, initializer=dummy_task)
+    print(f'TEST2 {mark} 2')
+    task = pool.submit(dummy_task)
+    print(f'TEST2 {mark} 3')
+    task.result()
+    print(f'TEST2 {mark} 4')
 
 
 def get_child_pids(pid):
